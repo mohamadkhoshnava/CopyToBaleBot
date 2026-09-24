@@ -72,6 +72,11 @@ export const msgmap = table('msgmap', {
   dm: integer('dm').notNull(),
   role: text('role').default('main'), // 'main' | 'extra' (overflow text parts)
   createdAt: integer('created_at').notNull(),
+  // Bale copies only: content fingerprint + whether Bale's echo of it was seen.
+  // Bale reports our own channel posts back as updates, sometimes with a
+  // different message_id than sendX returned, so echoes are matched by content.
+  fp: text('fp'),
+  echo: integer('echo').default(0),
 }, (t) => ({
   src: index('idx_msgmap_src').on(t.sp, t.sc, t.sm),
   dst: index('idx_msgmap_dst').on(t.dp, t.dc, t.dm),
